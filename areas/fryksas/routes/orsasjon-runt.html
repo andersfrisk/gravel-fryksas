@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang='sv'>
+<head>
+  <meta charset='utf-8'>
+  <title>Orsasjön runt – Gravelrutt</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' href='../../../shared/style.css'>
+  <script src='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/gpx.min.js'></script>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css' />
+</head>
+<body>
+  <header class='header'>
+    <h1>Orsasjön runt</h1>
+    <nav><a href='../index.html'>Tillbaka till ruttlistan</a> | <a href='/index.html'>Startsida</a></nav>
+  </header>
+  <section class='route-content'>
+    <div class='route-facts'>
+      <p><strong>Distans:</strong> 55 km</p>
+      <p><strong>Höjdmeter:</strong> 475 m</p>
+      <p><strong>Andel asfalt:</strong> 66 %</p>
+      <p><strong>Andel grus:</strong> 34 %</p>
+    </div>
+    <div id='map' style='height:400px; margin-bottom:1em;'></div>
+
+    <script>
+      const map = L.map('map');
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+      }).addTo(map);
+      const gpxPath = '../../gpx/orsasjon-runt.gpx';
+      new L.GPX(gpxPath, {
+        async: true,
+        marker_options: {
+          startIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-icon-start.png',
+          endIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-icon-end.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-shadow.png'
+        }
+      }).on('loaded', function(e) {
+        map.fitBounds(e.target.getBounds());
+      }).addTo(map);
+    </script>
+        <article class='description'>
+      <p>Om det finns en sjö verkar det finnas en dragningskraft för cyklister att cykla runt den, och cykelturen runt Orsasjön är helt klart värd att göra. En fin runda som till stora delar går på lättrullade asfalts- och grusvägar. Rundan letar sig ned från Fryksås mot Våmhus för att sedan via Bonäs (Sveriges längsta radby?) leta sig in mot Mora och vasaloppsmålet. Efter Mora tar sig rutten norrut på östra sidan om Orsasjön och avslutar med den tuffa men fina grusklättringen upp från Hansjö.</p>
+    </article>
+    <section class='photos'>
+      <h2>Bilder</h2>
+      <ul class='photo-gallery'><li><img src="../images/orsasjon-1.jpg" alt="Foto Orsasjön runt"></li><li><img src="../images/orsasjon-2.jpg" alt="Foto Orsasjön runt"></li></ul>
+    </section>
+    <p><a href='../../gpx/orsasjon-runt.gpx'>Ladda ned GPX-fil</a></p>
+  </section>
+</body>
+</html>

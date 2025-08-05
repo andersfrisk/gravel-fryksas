@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang='sv'>
+<head>
+  <meta charset='utf-8'>
+  <title>Henrys runda – Gravelrutt</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' href='../../../shared/style.css'>
+  <script src='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/gpx.min.js'></script>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css' />
+</head>
+<body>
+  <header class='header'>
+    <h1>Henrys runda</h1>
+    <nav><a href='../index.html'>Tillbaka till ruttlistan</a> | <a href='/index.html'>Startsida</a></nav>
+  </header>
+  <section class='route-content'>
+    <div class='route-facts'>
+      <p><strong>Distans:</strong> 28.7 km</p>
+      <p><strong>Höjdmeter:</strong> 341 m</p>
+      <p><strong>Andel asfalt:</strong> 20 %</p>
+      <p><strong>Andel grus:</strong> 80 %</p>
+    </div>
+    <div id='map' style='height:400px; margin-bottom:1em;'></div>
+
+    <script>
+      const map = L.map('map');
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+      }).addTo(map);
+      const gpxPath = '../../gpx/henrys.gpx';
+      new L.GPX(gpxPath, {
+        async: true,
+        marker_options: {
+          startIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-icon-start.png',
+          endIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-icon-end.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-shadow.png'
+        }
+      }).on('loaded', function(e) {
+        map.fitBounds(e.target.getBounds());
+      }).addTo(map);
+    </script>
+        <article class='description'>
+      <p>Henrys runda är vår sons favoritrunda från Fryksås. Rundan tar dig ned via stora grusvägar till Hornberga där den passerar vackra Hornberga kapell. Från Hornberga går den sedan vidare ut i närbelägen vildmark. Efter några kilometrar dyker några bekanta områden upp för den vana Grönklittsbesökaren då rutten passerar några av områdets slalombackar.<br>Med skidbackarna i ryggen börjar den riktiga utmaningen på rundan, klättringen tillbaka upp till Stormon. Väl uppe på Stormon väntar några mindre utförspartier innan de klassiska vägspåren leder tillbaka mot Fryksås. Den lite mer äventyrliga följer skidspåret mellan Grönklitt och Fryksås tillbaka, om orken tryter kan man även välja att följa asfaltsvägen från Grönklitt tillbaka till Fryksås.</p>
+    </article>
+    <section class='photos'>
+      <h2>Bilder</h2>
+      <ul class='photo-gallery'><li><img src="../images/henrys-1.jpg" alt="Foto Henrys runda"></li><li><img src="../images/henrys-2.jpg" alt="Foto Henrys runda"></li></ul>
+    </section>
+    <p><a href='../../gpx/henrys.gpx'>Ladda ned GPX-fil</a></p>
+  </section>
+</body>
+</html>

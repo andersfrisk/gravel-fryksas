@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <title>Gravel Fryksas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../shared/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>Gravelrutter i Fryksas</h1>
+    <nav><a href="/index.html">Till startsidan</a></nav>
+  </header>
+  <section class="filter">
+    <label>Max distans (km): <input id="maxDist" type="number" min="0" step="1" placeholder="Alla"></label>
+    <label>Max höjdmeter: <input id="maxElev" type="number" min="0" step="50" placeholder="Alla"></label>
+    <button onclick="applyFilters()">Filtrera</button>
+    <button onclick="resetFilters()">Återställ</button>
+  </section>
+  <section id="routeList"></section>
+  <script>
+    const routes = [{"title": "Henrys runda", "slug": "henrys-runda", "distance": 28.7, "elevation": 341, "asphalt": 20, "gravel": 80}, {"title": "Indnäs", "slug": "indnas", "distance": 43, "elevation": 602, "asphalt": 60, "gravel": 40}, {"title": "Orsasjön runt", "slug": "orsasjon-runt", "distance": 55, "elevation": 475, "asphalt": 66, "gravel": 34}, {"title": "Rädbjörka‑Fyriberg", "slug": "radbjorika-fyriberg", "distance": 40, "elevation": 605, "asphalt": 45, "gravel": 55}];
+    function renderList(data) {
+      const container = document.getElementById('routeList');
+      container.innerHTML = '';
+      if (!data.length) {
+        container.innerHTML = '<p>Inga rutter matchar filtren.</p>';
+        return;
+      }
+      data.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'route-card';
+        div.innerHTML = `
+          <h2><a href="./routes/${r.slug}.html">${r.title}</a></h2>
+          <p><strong>Distans:</strong> ${r.distance} km<br>
+          <strong>Höjdmeter:</strong> ${r.elevation} m<br>
+          <strong>Asfalt:</strong> ${r.asphalt} %<br>
+          <strong>Grus:</strong> ${r.gravel} %</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+    function applyFilters() {
+      const maxD = parseFloat(document.getElementById('maxDist').value);
+      const maxE = parseFloat(document.getElementById('maxElev').value);
+      const filtered = routes.filter(r => {
+        return (isNaN(maxD) || r.distance <= maxD) &&
+               (isNaN(maxE) || r.elevation <= maxE);
+      });
+      renderList(filtered);
+    }
+    function resetFilters() {
+      document.getElementById('maxDist').value = '';
+      document.getElementById('maxElev').value = '';
+      renderList(routes);
+    }
+    // Initial render
+    renderList(routes);
+  </script>
+</body>
+</html>

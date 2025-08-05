@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="gravel-fryksas-agent">
+  <trk>
+    <name>Orsasjön runt</name>
+    <trkseg>
+      <trkpt lat="61.136" lon="14.560" />
+      <trkpt lat="61.140" lon="14.565" />
+      <trkpt lat="61.145" lon="14.570" />
+      <trkpt lat="61.150" lon="14.575" />
+    </trkseg>
+  </trk>
+</gpx>

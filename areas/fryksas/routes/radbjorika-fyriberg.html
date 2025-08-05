@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang='sv'>
+<head>
+  <meta charset='utf-8'>
+  <title>Rädbjörka‑Fyriberg – Gravelrutt</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' href='../../../shared/style.css'>
+  <script src='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/gpx.min.js'></script>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css' />
+</head>
+<body>
+  <header class='header'>
+    <h1>Rädbjörka‑Fyriberg</h1>
+    <nav><a href='../index.html'>Tillbaka till ruttlistan</a> | <a href='/index.html'>Startsida</a></nav>
+  </header>
+  <section class='route-content'>
+    <div class='route-facts'>
+      <p><strong>Distans:</strong> 40 km</p>
+      <p><strong>Höjdmeter:</strong> 605 m</p>
+      <p><strong>Andel asfalt:</strong> 45 %</p>
+      <p><strong>Andel grus:</strong> 55 %</p>
+    </div>
+    <div id='map' style='height:400px; margin-bottom:1em;'></div>
+
+    <script>
+      const map = L.map('map');
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+      }).addTo(map);
+      const gpxPath = '../../gpx/radbjorika-long.gpx';
+      new L.GPX(gpxPath, {
+        async: true,
+        marker_options: {
+          startIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-icon-start.png',
+          endIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-icon-end.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-shadow.png'
+        }
+      }).on('loaded', function(e) {
+        map.fitBounds(e.target.getBounds());
+      }).addTo(map);
+    </script>
+        <article class='description'>
+      <p>En underbart vacker runda som tar er via fäbodarna Rädbjörka och Fyriberg ner till Våmådalen. Turen börjar med den snabba asfaltsvägen ned från Fryksås mot Orsa, men missa inte det oskyltade avtaget efter cirka 4 km in på grusvägen som leder till Våmhus. Ta första höger och börja klättringen upp mot Rädbjörka och Fyriberg. Väl på toppen väntar en småknixig stig som leder från grusvägen ner mot Fyriberg. Om du inte har en MTB eller är lite ovan på gravel kan det vara värt att leda cykeln första delen av denna korta stig. Väl ute vid Fyriberg öppnar sig en utsikt som nästan kan mäta sig med Fryksås. Från Fyriberg kommer en fartfylld och jättefin utförslöpa. Varning för hundarna i löplina på första gården till höger när ni kommer in i samhället dock – de har en tendens att få igång pulsen igen.<br>Väl nere i Våmådalen delar sig det långa, mellan och korta alternativet åt, men cyklingen i detta område går bland fina byar i lättcyklad terräng. När ni skymtar Våmhus kyrka är det dags att mentalt börja förbereda sig för klättringen. En cirka 6 km lång och 300 höjdmeter lång utmaning väntar innan ni är tillbaka i Fryksås. Sista delen går på asfaltsvägen upp mot Fryksås; denna väg är såklart lite trafikerad men bilisterna här brukar visa bra hänsyn.</p>
+    </article>
+    <section class='photos'>
+      <h2>Bilder</h2>
+      <ul class='photo-gallery'><li><img src="../images/radbjorika-1.jpg" alt="Foto Rädbjörka‑Fyriberg"></li><li><img src="../images/radbjorika-2.jpg" alt="Foto Rädbjörka‑Fyriberg"></li></ul>
+    </section>
+    <p><a href='../../gpx/radbjorika-long.gpx'>Ladda ned GPX-fil</a></p>
+  </section>
+</body>
+</html>

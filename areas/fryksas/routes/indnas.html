@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang='sv'>
+<head>
+  <meta charset='utf-8'>
+  <title>Indnäs – Gravelrutt</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' href='../../../shared/style.css'>
+  <script src='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/gpx.min.js'></script>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css' />
+</head>
+<body>
+  <header class='header'>
+    <h1>Indnäs</h1>
+    <nav><a href='../index.html'>Tillbaka till ruttlistan</a> | <a href='/index.html'>Startsida</a></nav>
+  </header>
+  <section class='route-content'>
+    <div class='route-facts'>
+      <p><strong>Distans:</strong> 43 km</p>
+      <p><strong>Höjdmeter:</strong> 602 m</p>
+      <p><strong>Andel asfalt:</strong> 60 %</p>
+      <p><strong>Andel grus:</strong> 40 %</p>
+    </div>
+    <div id='map' style='height:400px; margin-bottom:1em;'></div>
+
+    <script>
+      const map = L.map('map');
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+      }).addTo(map);
+      const gpxPath = '../../gpx/indnas.gpx';
+      new L.GPX(gpxPath, {
+        async: true,
+        marker_options: {
+          startIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-icon-start.png',
+          endIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-icon-end.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-shadow.png'
+        }
+      }).on('loaded', function(e) {
+        map.fitBounds(e.target.getBounds());
+      }).addTo(map);
+    </script>
+        <article class='description'>
+      <p>En trevlig men utmanande tur till underbara Indnäs, en liten fäbod på västra sidan om Våmån. Rundan inleds med att susa ned för asfaltsvägen och svänga av mot Våmhus efter 4 km. Väl nere i Våmådalen cyklar man bland hus och gårdar till den mindre byn Indor. Från Indor väntar en tuff men fin cykling upp mot vackra Indnäs. Indnäs nås ovanifrån vilket leder till en fin vy över den lilla fäboden. Efter att Indnäs passerats kan man välja att vika vänster tillbaka mot Indor, eller höger och förlänga rutten mot Bjönsaberg.<br>Nere i Våmån passerar man Våmhuskyrka innan den 6 km långa och 300 höjdmeter tuffa asfaltklättringen tillbaka till Fryksås; denna väg är såklart lite trafikerad men bilisterna här brukar visa bra hänsyn.</p>
+    </article>
+    <section class='photos'>
+      <h2>Bilder</h2>
+      <ul class='photo-gallery'><li><img src="../images/indnas-1.jpg" alt="Foto Indnäs"></li><li><img src="../images/indnas-2.jpg" alt="Foto Indnäs"></li></ul>
+    </section>
+    <p><a href='../../gpx/indnas.gpx'>Ladda ned GPX-fil</a></p>
+  </section>
+</body>
+</html>
