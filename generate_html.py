@@ -18,6 +18,7 @@ import json
 from pathlib import Path
 
 
+
 def load_routes(area_path: Path):
     """Load all route metadata files for a given area.
 
@@ -132,93 +133,61 @@ def generate_area_index(area: str, routes: list, output_path: Path):
     output_path.write_text(html, encoding="utf-8")
 
 
-def generate_route_page(area: str, route: dict, output_path: Path):
-    """Generate a single route page.
 
-    Args:
-        area: Area slug
-        route: Route metadata dict
-        output_path: Destination file path
-    """
-    title = route["title"]
-    slug = route["slug"]
-    distance = route.get("distance_km")
-    elevation = route.get("elevation_m")
-    asphalt = route.get("asphalt_pct")
-    gravel = route.get("gravel_pct")
-    gpx_file = route.get("gpx_file")
-    description = route.get("description", "")
-    # For placeholder images we just reference the thumbnail; user can replace later
-    thumbnail = route.get("thumbnail")
-    photos = route.get("photos", [])
-    # Create HTML content.  Avoid using f-strings for the entire document so we can
-    # safely embed curly braces used by Leaflet templates without triggering
-    # Python formatting. We'll build the page incrementally.
-    description_html = description.replace("\n", "<br>")
-    # Build the list of photo <li> elements
-    photo_items = "".join([
-        f'<li><img src="../images/{img}" alt="Foto {title}"></li>' for img in photos
-    ])
-    # Build a map script with doubled braces so Python's .format doesn't try to
-    # interpret them. Only the gpx_file placeholder remains single-braced.
-    map_script_template = '''
-    <script>
-      const map = L.map('map');
-      L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-        attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-      }}).addTo(map);
-      const gpxPath = '../../gpx/{gpx_file}';
-      new L.GPX(gpxPath, {{
-        async: true,
-        marker_options: {{
-          startIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-icon-start.png',
-          endIconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-icon-end.png',
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/pin-shadow.png'
-        }}
-      }}).on('loaded', function(e) {{
+
+def generate_route_page(area: str, route: dict, output_path: Path):
+    title = route['title']
+    description = route['description']
+    gpx_file = route['gpx_file']
+
+    html = f"""<!DOCTYPE html>
+<html lang=\"sv\">
+<head>
+  <meta charset=\"utf-8\">
+  <title>{title} – Gravelrutt</title>
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+  <link rel=\"stylesheet\" href=\"../../../shared/style.css\">
+  <link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\">
+  <script src=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js\"></script>
+  <script src=\"https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.5.1/gpx.min.js\"></script>
+</head>
+<body>
+  <header class=\"header\">
+    <h1>{title}</h1>
+    <a href=\"../index.html\">Tillbaka till ruttlistan</a> | <a href=\"../../../index.html\">Startsida</a>
+  </header>
+
+  <div class=\"container\">
+    <section class=\"facts\">
+      <p><strong>Distans:</strong> {route['distance_km']} km</p>
+      <p><strong>Höjdmeter:</strong> {route['elevation_m']} m</p>
+      <p><strong>Andel asfalt:</strong> {route['asphalt_pct']} %</p>
+      <p><strong>Andel grus:</strong> {route['gravel_pct']} %</p>
+    </section>
+
+    <div id=\"map\" style=\"height: 400px;\"></div>
+
+    <section class=\"description\">
+      <p>{description.replace('\n', '<br>')}</p>
+    </section>
+  </div>
+
+  <script>
+    const map = L.map('map');
+    L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+      attribution: 'Map data © <a href=\"https://openstreetmap.org\">OpenStreetMap</a> contributors'
+    }}).addTo(map);
+
+    new L.GPX('../../../areas/{area}/gpx/{gpx_file}', {{async: true}})
+      .on('loaded', function(e) {{
         map.fitBounds(e.target.getBounds());
       }}).addTo(map);
-    </script>
-    '''
-    map_script = map_script_template.format(gpx_file=gpx_file)
-    html = (
-        "<!DOCTYPE html>\n"
-        "<html lang='sv'>\n"
-        "<head>\n"
-        "  <meta charset='utf-8'>\n"
-        f"  <title>{title} – Gravelrutt</title>\n"
-        "  <meta name='viewport' content='width=device-width, initial-scale=1'>\n"
-        "  <link rel='stylesheet' href='../../../shared/style.css'>\n"
-        "  <script src='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js'></script>\n"
-        "  <script src='https://cdnjs.cloudflare.com/ajax/libs/leaflet.gpx/1.7.0/gpx.min.js'></script>\n"
-        "  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css' />\n"
-        "</head>\n"
-        "<body>\n"
-        "  <header class='header'>\n"
-        f"    <h1>{title}</h1>\n"
-        "    <nav><a href='../index.html'>Tillbaka till ruttlistan</a> | <a href='/index.html'>Startsida</a></nav>\n"
-        "  </header>\n"
-        "  <section class='route-content'>\n"
-        "    <div class='route-facts'>\n"
-        f"      <p><strong>Distans:</strong> {distance} km</p>\n"
-        f"      <p><strong>Höjdmeter:</strong> {elevation} m</p>\n"
-        f"      <p><strong>Andel asfalt:</strong> {asphalt} %</p>\n"
-        f"      <p><strong>Andel grus:</strong> {gravel} %</p>\n"
-        "    </div>\n"
-        "    <div id='map' style='height:400px; margin-bottom:1em;'></div>\n"
-        + map_script +
-        "    <article class='description'>\n"
-        f"      <p>{description_html}</p>\n"
-        "    </article>\n"
-        "    <section class='photos'>\n"
-        "      <h2>Bilder</h2>\n"
-        "      <ul class='photo-gallery'>" + photo_items + "</ul>\n"
-        "    </section>\n"
-        f"    <p><a href='../../gpx/{gpx_file}'>Ladda ned GPX-fil</a></p>\n"
-        "  </section>\n"
-        "</body>\n"
-        "</html>"
-    )
+  </script>
+</body>
+</html>
+"""
+
+    
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html, encoding="utf-8")
 
