@@ -12,6 +12,7 @@ photos:
   - henrys-1.jpg
   - henrys-2.jpg
 description: >
+<<<<<<< HEAD
   Test - Henrys runda är vår sons favoritrunda från Fryksås. Rundan tar dig ned via stora
   grusvägar till Hornberga där den passerar vackra Hornberga kapell. Från Hornberga går
   den sedan vidare ut i närbelägen vildmark. Efter några kilometrar dyker några bekanta
